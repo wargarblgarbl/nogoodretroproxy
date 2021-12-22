@@ -53,12 +53,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("oops")
 		}
 		fixed := strings.Replace(string(contents), "http://", "http://"+concat+"/http://", -1)
-		fixed2 := strings.Replace(fixed, "https://", "http://"+concat+"/https://", -1)
-
-		fixed3 := strings.Replace(fixed2, "<a href=\"/", blorf, -1)
+		fixed = strings.Replace(fixed, "https://", "http://"+concat+"/https://", -1)
+		fixed = strings.Replace(fixed, "<a href=\"/", blorf, -1)
 		//	fmt.Println(fixed)
 		if err == nil && err2 == nil {
-			w.Write([]byte(fixed3))
+			w.Write([]byte(fixed))
 		}
 		defer z.Body.Close()
 
