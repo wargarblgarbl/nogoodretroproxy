@@ -12,6 +12,8 @@ var port string  = "8080"
 var url string = "localhost"
 var concat string = url+":"+port
 
+
+// THIS FUNCTION IS BORROWED FROM SOME TUTORIAL, IT IS THEREFORE EXEMPT FROM ANY LICENSING FOR THIS PROGRAM //
 func trimLeftChar(s string) string {
 	for i := range s {
 		if i > 0 {
@@ -20,6 +22,7 @@ func trimLeftChar(s string) string {
 	}
 	return s[:0]
 }
+// --------------------------------------------- END OUT OF LICENSE BLOCK --------------------------------- //
 
 func main() {
 
