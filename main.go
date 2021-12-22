@@ -26,6 +26,7 @@ func main() {
 
 	http.HandleFunc("/", mainHandler)
 	http.ListenAndServe(":"+port, nil)
+
 }
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	var thing string
@@ -33,35 +34,31 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	x := strings.Split(r.URL.Path, ":"+port)
 	for a, _ := range x {
 		if strings.Contains(x[a], "http") {
-			thing = strings.Replace(x[a], "/http:/", "http://", -1)
-			thing = strings.Replace(x[a], "/https:/", "https://", -1)
+			thing = strings.Replace(strings.Replace(x[a], "/http:/", "http://", -1), "/https:/", "https://", -1)
 				fmt.Println(thing)
 		} 
 	}
 
 	if strings.Contains(thing, "http") {
-		if strings.Contains(thing, "/http:/") {
-			thing = strings.Replace(thing, "/http:/", "http://", -1)
-		}
 		blorf := "<a href=\"" + "http://"+concat+"/" + thing + "/"
 		fmt.Println(blorf)
 		fmt.Println(thing)
 		z, err := http.Get(thing)
 		if err != nil {
-			w.Write([]byte(thing))
+			fmt.Println("oops")
 		}
 		contents, err2 := io.ReadAll(z.Body)
-		fmt.Println("CONTENTS")
-		if err2 != nil {
-			w.Write([]byte("blargh, strop trying unsupported stuff"))
+		fmt.Println("CONTENTS SERVED")
+		if err != nil {
+			fmt.Println("oops")
 		}
-		fixed := strings.Replace(string(contents), "https://", "http://"+concat+"/https://", -1)
-		fixed = strings.Replace(string(contents), "http://", "http://"+concat+"/http://", -1)
+		fixed := strings.Replace(string(contents), "http://", "http://"+concat+"/http://", -1)
+		fixed2 := strings.Replace(fixed, "https://", "http://"+concat+"/https://", -1)
 
-		fixed = strings.Replace(fixed, "<a href=\"/", blorf, -1)
+		fixed3 := strings.Replace(fixed2, "<a href=\"/", blorf, -1)
 		//	fmt.Println(fixed)
 		if err == nil && err2 == nil {
-			w.Write([]byte(fixed))
+			w.Write([]byte(fixed3))
 		}
 		defer z.Body.Close()
 
