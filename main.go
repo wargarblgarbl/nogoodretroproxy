@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	//"net"
 	"io"
 )
 
 var port string  = "8080"
 var url string = "localhost"
 var concat string = url+":"+port
-
 
 // THIS FUNCTION IS BORROWED FROM SOME TUTORIAL, IT IS THEREFORE EXEMPT FROM ANY LICENSING FOR THIS PROGRAM //
 func trimLeftChar(s string) string {
@@ -30,7 +28,6 @@ func main() {
 	http.ListenAndServe(":"+port, nil)
 }
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	//var body string
 	var thing string
 
 	x := strings.Split(r.URL.Path, ":"+port)
@@ -40,11 +37,6 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 			thing = strings.Replace(x[a], "/https:/", "https://", -1)
 				fmt.Println(thing)
 		} 
-		//else {
-
-		//	thing = "http://" + (trimLeftChar(x[a]))
-		//}
-
 	}
 
 	if strings.Contains(thing, "http") {
@@ -58,12 +50,10 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.Write([]byte(thing))
 		}
-		defer z.Body.Close()
 		contents, err2 := io.ReadAll(z.Body)
 		fmt.Println("CONTENTS")
 		if err2 != nil {
 			w.Write([]byte("blargh, strop trying unsupported stuff"))
-			return
 		}
 		fixed := strings.Replace(string(contents), "https://", "http://"+concat+"/https://", -1)
 		fixed = strings.Replace(string(contents), "http://", "http://"+concat+"/http://", -1)
@@ -73,5 +63,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		if err == nil && err2 == nil {
 			w.Write([]byte(fixed))
 		}
+		defer z.Body.Close()
+
 	}
 }
