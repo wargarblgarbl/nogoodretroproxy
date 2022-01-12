@@ -49,7 +49,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		contents, err2 := io.ReadAll(z.Body)
 		fmt.Println("CONTENTS SERVED")
-		if err != nil {
+		if err2 != nil {
 			fmt.Println("oops")
 		}
 		fixed := strings.Replace(string(contents), "http://", "http://"+concat+"/http://", -1)
